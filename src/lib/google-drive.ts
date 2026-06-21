@@ -1,12 +1,11 @@
 import { google, type drive_v3 } from "googleapis";
-import type { JSONClient } from "google-auth-library";
 
 interface ServiceAccountCredentials {
   client_email: string;
   private_key: string;
 }
 
-let authClientPromise: Promise<JSONClient> | null = null;
+let authClientPromise: Promise<any> | null = null;
 
 function getCredentialsFromEnv(): ServiceAccountCredentials {
   const inlineJson = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_JSON;
