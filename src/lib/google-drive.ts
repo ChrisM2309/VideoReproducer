@@ -7,6 +7,23 @@ interface ServiceAccountCredentials {
 
 let authClientPromise: Promise<any> | null = null;
 
+function cleanEnvValue(value: string) {
+  const trimmed = value.trim();
+
+  if (
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"))
+  ) {
+    return trimmed.slice(1, -1);
+  }
+
+  return trimmed;
+}
+
+function cleanPrivateKey(value: string) {
+  return cleanEnvValue(value).replace(/\\n/g, "\n");
+}
+
 function getCredentialsFromEnv(): ServiceAccountCredentials {
   const inlineJson = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_JSON;
 
@@ -15,17 +32,18 @@ function getCredentialsFromEnv(): ServiceAccountCredentials {
 
     if (parsed.client_email && parsed.private_key) {
       return {
-        client_email: parsed.client_email,
-        private_key: parsed.private_key.replace(/\\n/g, "\n"),
+        client_email: cleanEnvValue(parsed.client_email),
+        private_key: cleanPrivateKey(parsed.private_key),
       };
     }
   }
 
-  const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(
-    /\\n/g,
-    "\n",
-  );
+  const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
+    ? cleanEnvValue(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL)
+    : undefined;
+  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
+    ? cleanPrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY)
+    : undefined;
 
   if (!clientEmail || !privateKey) {
     throw new Error(

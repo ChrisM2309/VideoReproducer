@@ -1,0 +1,16 @@
+
+> videoreproducer-app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.160.1:3000
+- Environments: .env
+✓ Ready in 2.3s
+Creating turbopack project {
+  dir: 'C:\\Users\\chris\\Documents\\Programming\\PersonalDev\\VideoReproducer',
+  testMode: true
+}
+
+ GET / 200 in 688ms (next.js: 414ms, application-code: 275ms)
+ GET / 200 in 133ms (next.js: 21ms, application-code: 112ms)
